@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detreshop</title>
+
+<style>
+body {font-family: Arial; margin:0; background:#fff;}
+header {text-align:center; padding:20px; font-size:28px; border-bottom:1px solid #eee;}
+
+.products {display:flex; flex-wrap:wrap; justify-content:center;}
+.card {width:200px; border:1px solid #eee; margin:10px; padding:10px; text-align:center;}
+
+button {padding:10px; background:black; color:white; border:none;}
+
+#cart {
+position:fixed;
+right:10px;
+top:80px;
+background:#fff;
+border:1px solid #ccc;
+padding:10px;
+width:200px;
+}
+
+@media(max-width:600px){
+#cart {position:static; width:100%;}
+}
+</style>
+</head>
+
+<body>
+
+<header>DETRESHOP</header>
+
+<div style="text-align:center;">
+<input id="name" placeholder="ชื่อคุณ">
+<button onclick="saveName()">บันทึก</button>
+<p id="showName"></p>
+</div>
+
+<div class="products">
+<div class="card">
+<img src="https://via.placeholder.com/200">
+<h3>Luxury Shirt</h3>
+<p>590 บาท</p>
+<button onclick="add('Luxury Shirt',590)">เพิ่ม</button>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/200">
+<h3>Premium Black</h3>
+<p>790 บาท</p>
+<button onclick="add('Premium Black',790)">เพิ่ม</button>
+</div>
+</div>
+
+<div id="cart">
+<h4>🛒 ตะกร้า</h4>
+<ul id="list"></ul>
+<p>รวม: <span id="total">0</span> บาท</p>
+<button onclick="pay()">ชำระเงิน</button>
+</div>
+
+<script>
+let cart = [];
+let total = 0;
+
+function saveName(){
+let n = document.getElementById("name").value;
+localStorage.setItem("user", n);
+document.getElementById("showName").innerText = "สวัสดี " + n;
+}
+
+window.onload = function(){
+let u = localStorage.getItem("user");
+if(u){document.getElementById("showName").innerText="สวัสดี "+u;}
+}
+
+function add(name,price){
+cart.push({name,price});
+total+=price;
+update();
+}
+
+function update(){
+let list=document.getElementById("list");
+list.innerHTML="";
+cart.forEach(i=>{
+let li=document.createElement("li");
+li.textContent=i.name+" "+i.price;
+list.appendChild(li);
+});
+document.getElementById("total").innerText=total;
+}
+
+function pay(){
+let msg="ออเดอร์ Detreshop\n";
+cart.forEach(i=>{msg+=i.name+"\n";});
+msg+="รวม "+total+" บาท";
+
+window.open("https://line.me/R/msg/text/?"+encodeURIComponent(msg));
+
+// 🔴 แก้เบอร์คุณตรงนี้
+window.open("https://promptpay.io/0812345678/"+total);
+
+// 🔴 ใส่ฟอร์มคุณ (ถ้ายังไม่มีใช้ลิงก์นี้ชั่วคราว)
+window.open("https://forms.gle/XXXXXXXX");
+}
+</script>
+
+</body>
+</html>
